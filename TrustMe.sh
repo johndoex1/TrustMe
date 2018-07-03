@@ -106,23 +106,25 @@ menu()
 
 if [ "$(id -u)" -eq "0" ]; then
 
-	clear && tput civis && sleep 2
+	while true; do
 
-	menu
+		clear && tput civis && sleep 2
 
-	case $option in
+		menu
 
-		1) attack
-			;;
+		case $option in
 
-		2) cleaner
-			;;
+			1) attack
+				;;
 
-		0) exit
-			;;
+			2) cleaner
+				;;
 
-	esac
+			0) exit
+				;;
 
+		esac
+	done
 else
 	echo -e "${redColour}Es necesario correr el programa como root${endColour}"
 fi
