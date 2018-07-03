@@ -83,7 +83,7 @@ cleaner()
 	fi
 
 	ifconfig at0 down 2>/dev/null
-	service network-manager restart
+	service network-manager restart && service apache2 stop && rm -rf /var/www/html/* 2>/dev/null && tmux kill-session -t EvilTwin 2>/dev/null
 }
 
 menu()
