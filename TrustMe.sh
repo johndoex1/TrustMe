@@ -104,6 +104,11 @@ credentialsMonitor()
 	done
 }
 
+instalation()
+{
+	echo hola
+}
+
 menu()
 {
 	q=0
