@@ -1,4 +1,6 @@
 #!/bin/bash
+# Programa hecho por Marcelo Vázquez (aka s4vitar)
+# No me hago responsable del mal uso que se pueda hacer de este programa, pues pretende ser educativo, no malicioso.
 
 #Colours
 greenColour="\e[0;32m\033[1m"
@@ -9,6 +11,8 @@ yellowColour="\e[0;33m\033[1m"
 purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
+
+clear && tput civis && echo -e "${grayColour}El programa está disponible en GitHub ($endColour${blueColour}https://github.com/s4vitar/TrustMe${endColour}${grayColour}), recomiendo su lectura para el correcto entendimiento del programa.${endColour}" && sleep 6
 
 xxx(){
 	q=1
