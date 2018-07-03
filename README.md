@@ -11,6 +11,8 @@ Algunas consideraciones a tener en cuenta:
 
 **Importante:** Es necesario tener instaladas las herramientas _xdotool_, _tmux_ y _aircrack-ng_. Las plantillas son personalizables, pudiendo meter las mismas en el directorio _Plantilla_, posteriormente el programa se encarga de gestionar el servicio web.
 
+**Más Importante:** Es necesario estar conectado vía **eth0** y contar con una tarjeta de red externa (o la del propio ordenador) para montar el AP.
+
 
 
 

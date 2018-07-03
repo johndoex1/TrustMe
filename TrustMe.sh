@@ -12,7 +12,6 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
-clear && tput civis && echo -e "${grayColour}El programa está disponible en GitHub ($endColour${blueColour}https://github.com/s4vitar/TrustMe${endColour}${grayColour}), recomiendo su lectura para el correcto entendimiento del programa.${endColour}" && sleep 6
 
 xxx(){
 	q=1
@@ -108,9 +107,40 @@ credentialsMonitor()
 	done
 }
 
-instalation()
+installation()
 {
-	echo hola
+	if [ ! "$(which xdotool)" ]; then
+		clear && echo -e "${yellowColour}El programa${endColour}${blueColour} xdotool${endColour}${yellowColour} no se encuentra instalado\n" && sleep 0.5
+		echo -ne "${yellowColour}¿Deseas instalar el programa? (s/n) ${endColour}" && tput cnorm
+		read xdotool_installation
+
+		if [ "$xdotool_installation" == "s" ]; then
+			echo -e "\n${blueColour}Instalando...${endColour}\n"
+			apt-get install -y xdotool > /dev/null 2>&1 && echo -e "${redColour}¡Programa Instalado!${endColour}" && sleep 2
+		fi
+	fi
+
+	if [ ! "$(which aircrack-ng)" ]; then
+		clear && echo -e "${yellowColour}El programa${endColour}${blueColour} aircrack-ng${endColour}${yellowColour} no se encuentra instalado\n" && sleep 0.5
+		echo -ne "${yellowColour}¿Deseas instalar el programa? (s/n) ${endColour}" && tput cnorm
+		read aircrack_installation
+
+		if [ "$aircrack_installation" == "s" ]; then
+			echo -e "\n${blueColour}Instalando...${endColour}\n"
+			apt-get install -y aircrack-ng > /dev/null 2>&1 && echo -e "${redColour}¡Programa Instalado!${endColour}" && sleep 2
+		fi
+	fi
+
+	if [ ! "$(which tmux)" ]; then
+		clear && echo -e "${yellowColour}El programa${endColour}${blueColour} tmux${endColour}${yellowColour} no se encuentra instalado\n" && sleep 0.5
+		echo -ne "${yellowColour}¿Deseas instalar el programa? (s/n) ${endColour}" && tput cnorm
+		read tmux_installation
+
+		if [ "$tmux_installation" == "s" ]; then
+			echo -e "\n${blueColour}Instalando...${endColour}\n"
+			apt-get install -y tmux > /dev/null 2>&1 && echo -e "${redColour}¡Programa Instalado!${endColour}" && sleep 2
+		fi
+	fi
 }
 
 menu()
@@ -136,6 +166,8 @@ menu()
 
 if [ "$(id -u)" -eq "0" ]; then
 
+	clear && tput civis && echo -e "${grayColour}El programa está disponible en GitHub ($endColour${blueColour}https://github.com/s4vitar/TrustMe${endColour}${grayColour}), recomiendo su lectura para el correcto entendimiento del programa.${endColour}" && sleep 6
+
 	while true; do
 
 		clear && tput civis && sleep 2
@@ -150,7 +182,7 @@ if [ "$(id -u)" -eq "0" ]; then
 			2) cleaner
 				;;
 
-			3) instalation
+			3) installation
 				;;
 
 			4) credentialsMonitor
